@@ -2,15 +2,17 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import pandas as pd
+
 from yellowbrick.cluster import KElbowVisualizer, SilhouetteVisualizer
+
 from sklearn import cluster, metrics, decomposition, preprocessing
-from sklearn.base import ClusterMixin
 from sklearn.manifold import TSNE
 
 import plotly.express as px
 import plotly.graph_objects as go
 
 def modelCluster(data):
+
     #Standardiser les données
     std_scale = preprocessing.StandardScaler().fit(data)
     data_std = pd.DataFrame(
@@ -29,12 +31,14 @@ def modelCluster(data):
 
     print(f'Le nombre optimal de clusters est {k}')
 
-    # Méthode du score Silhouettes 
+    # Méthode du score Silhouette
     model = cluster.KMeans(k)
     visualizer_silhouette = SilhouetteVisualizer(model)
 
     visualizer_silhouette.fit(data_std)
     visualizer_silhouette.poof()
+
+    score = visualizer_silhouette.silhouette_score_
 
     ### Visualisation ####
     # Predict labels
@@ -102,6 +106,12 @@ def modelCluster(data):
 
     plt.show()
 
+    return {
+        "Features": data.columns.values,
+        "Nbr clusters": k,
+        "Score silhouette": score
+    }
+
 
 # Affiche les histogrammes et les boîtes à moustaches de chaque variable quantitative
 def drawHistAndBoxPlot(data, columns, dims_fig):
@@ -131,18 +141,26 @@ def drawHistAndBoxPlot(data, columns, dims_fig):
 # Affiche la projection des individus sur les différents plans factoriels
 # Affiche les cercles de corrélations
 def acpAnalysis(data):
-    n = data.shape[0]
-    p = data.shape[1]
+
+    # Standardisation des données
+    std_scale = preprocessing.StandardScaler().fit(data)
+    data_std = pd.DataFrame(
+    std_scale.transform(data),
+    columns=data.columns
+)
+
+    n = data_std.shape[0]
+    p = data_std.shape[1]
 
     # On instancie l'object ACP
     acp = decomposition.PCA(svd_solver='full')
     # On récupère les coordonnées factorielles Fik pour chaque individu (projection des individus sur les composantes principales)
-    coord = acp.fit_transform(data)
+    coord = acp.fit_transform(data_std)
 
     # Création d'un Datframe contenant les coordonnées factiorelles, le nom de chaque produit et le nom des colonnes correspondant à chaque composante principale
     projected_data = pd.DataFrame(
         data=coord,
-        index=data.index,
+        index=data_std.index,
         columns=[ f'F{i}' for i in range(1, p+1) ]
     )
 
@@ -212,7 +230,7 @@ def acpAnalysis(data):
 
         # affichage des étiquettes (noms des variables)
         for j in range(p):
-            axes[1].annotate(data.columns[j],(corvar[j,i],corvar[j,i+1]))
+            axes[1].annotate(data_std.columns[j],(corvar[j,i],corvar[j,i+1]))
             axes[1].arrow(0, 0, corvar[j,i], corvar[j,i+1], length_includes_head=True, head_width=0.04)
 
         # ajouter un cercle
