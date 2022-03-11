@@ -5,7 +5,7 @@ import pandas as pd
 
 from yellowbrick.cluster import KElbowVisualizer, SilhouetteVisualizer
 
-from sklearn import cluster, metrics, decomposition, preprocessing
+from sklearn import cluster, decomposition, preprocessing
 from sklearn.manifold import TSNE
 
 import plotly.express as px
