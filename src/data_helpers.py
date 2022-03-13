@@ -8,6 +8,8 @@ from yellowbrick.cluster import KElbowVisualizer, SilhouetteVisualizer
 from sklearn import cluster, decomposition, preprocessing
 from sklearn.manifold import TSNE
 
+import plotly.io as pio
+pio.renderers.default='notebook'
 import plotly.express as px
 import plotly.graph_objects as go
 

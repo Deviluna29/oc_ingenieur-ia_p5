@@ -1,3 +1,13 @@
+## Résultats des Notebooks sous format HTML
+
+Les résultats des notebooks, en HTML avec les graphes interactifs :
+
+<a href = https://deviluna29.github.io/oc_ingenieur-ia_p5/P5_01_notebook_analyse>HTML Notebook analyse et merge</a>
+
+<a href = https://deviluna29.github.io/oc_ingenieur-ia_p5/P5_02_notebook_model.html>HTML Notebook modélisation</a>
+
+<a href = https://deviluna29.github.io/oc_ingenieur-ia_p5/P5_03_notebook_simulation.html>HTML Notebook contrat de maintenance</a>
+
 ## Installation de l'environnement virtuel
 
 Créer l'environnement à partir du fichier yaml
@@ -8,16 +18,6 @@ conda env create -f environment.yml
 Activer l'environnement
 ```bash
 conda activate projet_5
-```
-
-Quitter l'environnement
-```bash
-conda deactivate projet_5
-```
-
-Supprimer l'environnement
-```bash
-conda env remove --name projet_5
 ```
 
 ## Téléchargement du jeu de données
